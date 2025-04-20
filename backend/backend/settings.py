@@ -23,13 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cw#7#xiqx6a!59&6alg=i_kt2u*12%-06&uzg8x&tvhzr_(+=x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['https://plataforma-neutralize.onrender.com']
-
-ONEDRIVE_CLIENT_ID = '8fb73b41-db22-4891-adb4-c479145bd7ba'
-ONEDRIVE_CLIENT_SECRET = '4bc51ecb-a82b-402e-8f0c-8fa910f1d193'
-ONEDRIVE_REDIRECT_URI = 'http://localhost:8000/auth/callback'
+ALLOWED_HOSTS = ['plataforma-neutralize.onrender.com', 'localhost']
 
 
 # Application definition
@@ -42,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'backend.pacientes',
+    'pacientes',
     'corsheaders',
 
 ]
@@ -51,23 +47,23 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Deve vir antes de CommonMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 # Libere o domínio do seu frontend na Vercel
+
 CORS_ALLOWED_ORIGINS = [
     "https://plataforma-neutralize.vercel.app",
-    "http://localhost:3000"  # Para desenvolvimento local
+    "http://localhost:3000",
+    "http://localhost:8080",  # Para desenvolvimento local
 ]
 
 # Se precisar de cookies/sessão (ex: autenticação)
-CORS_ALLOW_CREDENTIALS = True
 
 SUMMERNOTE_CONFIG = {
     'iframe': True,
@@ -98,7 +94,7 @@ SUMMERNOTE_CONFIG = {
     'attachment_model': 'anamnese.SummernoteAttachment',  # opcional para uploads
 }
 
-ROOT_URLCONF = 'backend.backend.urls'
+ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
@@ -116,16 +112,19 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.backend.wsgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 import os
+print(os.environ.get('DATABASE_URL'))
 import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
 
-DEBUG = False
+DEBUG = True
 
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
@@ -168,8 +167,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

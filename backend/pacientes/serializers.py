@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.pacientes.models import Paciente, Mobilidade, ForcaMuscular, EscalaseQuestionários, TesteFuncao, TodosTestes, ModeloPresetado, HistoricoClinico
+from pacientes.models import Paciente, Mobilidade, ForcaMuscular, EscalaseQuestionários, TesteFuncao, TodosTestes, ModeloPresetado, HistoricoClinico
 
 
 class ModeloPresetadoSerializer(serializers.ModelSerializer):

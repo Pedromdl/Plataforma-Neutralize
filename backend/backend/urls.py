@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from backend.pacientes.views import SalvarPacienteView, BuscarPacientesView, ModeloPresetadoView, HistoricoClinicoView, index
+from pacientes.views import SalvarPacienteView, BuscarPacientesView, ModeloPresetadoView, HistoricoClinicoView, index
 
 
 urlpatterns = [
