@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Paciente</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Card de Informações do Paciente -->
+        <div class="card">
+            <h2>Informações do Paciente</h2>
+            <p><strong>Nome:</strong> João da Silva</p>
+            <p><strong>Idade:</strong> 45 anos</p>
+            <p><strong>Diagnóstico:</strong> Lesão no Joelho</p>
+        </div>
+
+        <!-- Área de Gráficos -->
+        <div class="charts-container">
+            <div class="card">
+                <h3>Mobilidade</h3>
+                <canvas id="graficoMobilidade"></canvas>
+            </div>
+            <div class="card">
+                <h3>Força Muscular</h3>
+                <canvas id="graficoForcaMuscular"></canvas>
+            </div>
+            <div class="card">
+                <h3>Escalas e Questionários</h3>
+                <canvas id="graficoEscalas"></canvas>
+            </div>
+            <div class="card">
+                <h3>Testes de Função</h3>
+                <canvas id="graficoTestesFuncao"></canvas>
+            </div>
+        </div>
+    </div>
+            
+
+
+    <script>
+        // Configuração dos gráficos
+        function criarGrafico(id, label, dados) {
+            new Chart(document.getElementById(id), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: label,
+                        data: dados,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criando os gráficos
+        criarGrafico('graficoMobilidade', 'Mobilidade', [10, 15, 12, 18, 20, 25]);
+        criarGrafico('graficoForcaMuscular', 'Força Muscular', [8, 10, 9, 14, 16, 19]);
+        criarGrafico('graficoEscalas', 'Escalas e Questionários', [5, 8, 6, 12, 15, 17]);
+        criarGrafico('graficoTestesFuncao', 'Testes de Função', [7, 9, 6, 10, 12, 15]);  // Gráfico de Testes de Função
+    </script>
+</body>
+</html>

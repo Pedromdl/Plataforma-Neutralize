@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Criar Anamnese</title>
+  <!-- Summernote CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Summernote JS -->
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+</head>
+<body>
+
+  <h1>Criar Anamnese</h1>
+
+  <form id="anamnese-form">
+    <label for="nome">Nome do Paciente:</label><br>
+    <input type="text" id="nome" name="nome_paciente"><br><br>
+
+    <label for="tipo">Tipo de Anamnese:</label><br>
+    <input type="text" id="tipo" name="tipo_anamnese"><br><br>
+
+    <label for="conteudo">Conteúdo:</label><br>
+    <textarea id="summernote" name="conteudo"></textarea><br><br>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    $(document).ready(function() {
+      $('#summernote').summernote({
+        height: 300
+      });
+
+      $('#anamnese-form').on('submit', function(e) {
+        e.preventDefault();
+        const data = {
+          nome_paciente: $('#nome').val(),
+          tipo_anamnese: $('#tipo').val(),
+          conteudo: $('#summernote').val()
+        };
+
+        fetch('http://localhost:8000/anamnese/criar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert('Anamnese criada com sucesso!');
+          console.log(data);
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

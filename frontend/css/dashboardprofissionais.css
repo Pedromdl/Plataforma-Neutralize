@@ -1,0 +1,154 @@
+body {
+    display: flex;
+    background-color: #121212;
+}
+
+.bg-light {
+    --bs-bg-opacity: 1;
+    background-color: #121212 !important;
+}
+
+.p-3 {
+    background-color: #121212;
+}
+
+/* Estilização do menu lateral */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #343a40;
+    padding-top: 1rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar a {
+    color: white;
+    padding: 15px;
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+}
+
+/* Ajuste para o conteúdo principal */
+.content {
+    margin-left: 250px; /* Largura do menu lateral */
+    padding: 20px;
+    width: calc(100% - 250px); /* Garante que o conteúdo não ultrapasse a tela */
+    box-sizing: border-box; /* Inclui padding e borda no cálculo do tamanho */
+}
+
+/* Ajuste para o formulário de busca */
+#buscarPacienteForm {
+    margin-left: 0; /* Remove qualquer margem extra à esquerda */
+    width: 100%; /* Faz o formulário ocupar toda a largura disponível */
+}
+
+.container.py-3 {
+    max-width: 1200px;
+}
+
+.form-control-sm {
+    min-height: calc(1.5em + .5rem + calc(var(--bs-border-width)* 2));
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    border-radius: .25rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-grafico {
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    background-color: #242424;
+    color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Adiciona uma sombra mais destacada */
+    border: none;
+}
+
+.grafico-container {
+    height: 400px;
+    margin: 1rem 0;
+}
+
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.charts-containerforca {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100px; /* Reduzindo o tamanho do menu */
+    }
+    .sidebar a {
+        font-size: 14px;
+        padding: 10px; /* Diminuindo o espaço interno */
+        text-align: center; /* Centralizando os ícones/textos */
+    }
+    .content {
+        margin-left: 100px; /* Ajustando o espaço do conteúdo */
+        width: calc(100% - 100px);
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px; /* Menu lateral ainda menor */
+    }
+    .sidebar a {
+        font-size: 12px;
+        padding: 8px;
+        text-align: center;
+    }
+    .content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+    }
+}
+
+.dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    width: 100%; /* Garante que o dropdown tenha a mesma largura do campo de busca */
+    left: 0; /* Alinha o dropdown com o campo de busca */
+}
+
+.dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+#resultadoBusca {
+    max-height: 200px; /* Limita a altura do dropdown */
+    overflow-y: auto; /* Adiciona rolagem vertical se necessário */
+    position: absolute; /* Garante que o dropdown seja posicionado em relação ao container pai */
+    z-index: 1000; /* Garante que o dropdown fique acima de outros elementos */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    width: 100%; /* Faz o dropdown ter a mesma largura do campo de busca */
+    left: 0; /* Alinha o dropdown com o campo de busca */
+    top: 100%; /* Posiciona o dropdown logo abaixo do campo de busca */
+}

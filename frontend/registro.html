@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Paciente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Adicionar Quill.js -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <style>
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #f8f9fa;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .dynamic-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 1rem; /* Bordas arredondadas */
+            background-color: white;
+            width: 250px; /* Largura fixa para o formato retangular pequeno */
+            height: auto; /* Altura ajustável */
+            display: inline-block; /* Exibir os containers lado a lado */
+            vertical-align: top; /* Alinhar os containers verticalmente */
+            text-align: left; /* Alinhar o conteúdo à esquerda */
+        }
+        .dynamic-item input,
+        .dynamic-item textarea {
+            font-size: 0.9rem; /* Ajustar o tamanho da fonte */
+        }
+        .btn-remove-item {
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Hub de Avaliação</h1>
+
+        <form id="cadastroPacienteForm">
+            <!-- Seleção de Pacientes -->
+            <div class="form-section">
+                <h3>Selecionar Paciente</h3>
+                <div class="mb-3">
+                    <label for="paciente" class="form-label">Paciente*</label>
+                    <select id="paciente" class="form-select" required>
+                        <option value="">Selecione um paciente</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Seção Histórico Clínico -->
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">Histórico Clínico</h3>
+                </div>
+                <div class="mb-3">
+                    <label for="modeloPresetado" class="form-label">Modelo Pré-Setado</label>
+                    <select id="modeloPresetado" class="form-select">
+                        <option value="">Selecione um modelo</option>
+                        <!-- Os modelos serão preenchidos dinamicamente -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="conteudoHistorico" class="form-label">Conteúdo do Histórico</label>
+                    <div id="conteudoHistoricoEditor" style="height: 400px; min-height: 300px; max-height: 600px; overflow-y: auto;"></div>
+                </div>
+                <button type="button" id="btnSalvarHistorico" class="btn btn-primary">Salvar Histórico</button>
+            </div>
+
+            <!-- Seção Mobilidade -->
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">Mobilidade</h3>
+                    <button type="button" id="btnAdicionarMobilidade" class="btn btn-sm btn-primary">+ Adicionar Movimento</button>
+                </div>
+                <div id="mobilidadesContainer">
+                    <!-- Containers de mobilidade serão adicionados dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Seção Força Muscular -->
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">Força Muscular</h3>
+                    <button type="button" id="btnAdicionarForca" class="btn btn-sm btn-primary">+ Adicionar Musculatura</button>
+                </div>
+                <div id="forcaMuscularContainer">
+                    <!-- Containers de força muscular serão adicionados dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Seção Escalas e Questionários -->
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="mb-0">Escalas e Questionários</h3>
+                    <button type="button" id="btnAdicionarEscala" class="btn btn-sm btn-primary">+ Adicionar Escala</button>
+                </div>
+                <div id="escalasContainer">
+                    <!-- Containers de escalas serão adicionados dinamicamente -->
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="button" id="btnVoltarDashboard" class="btn btn-secondary me-md-2">Voltar ao Dashboard</button>
+                <button type="button" id="btnCancelar" class="btn btn-secondary me-md-2">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar Paciente</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { initializeQuill } from './scripts/quillConfig.js';
+        import { buscarPacientes } from './scripts/buscaPacientes.js';
+        import { API_BASE_URL } from './config.js';
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            console.log("DOM carregado!");
+
+            const modeloPresetadoSelect = document.getElementById("modeloPresetado");
+            const pacienteSelect = document.getElementById("paciente");
+            const nomeInput = document.getElementById("nome"); // Assumindo que há um campo de entrada com id "nome"
+
+            // Inicializar o editor Quill.js
+            const quill = initializeQuill('#conteudoHistoricoEditor');
+            console.log("Editor Quill inicializado!");
+
+            // Buscar modelos pré-setados do backend
+            fetch(`${API_BASE_URL}/modelos-presetados/`)
+                .then(response => {
+                    console.log("Resposta do backend:", response);
+                    return response.json();
+                })
+                .then(modelos => {
+                    console.log("Modelos carregados:", modelos);
+                    modelos.forEach(modelo => {
+                        const option = document.createElement("option");
+                        option.value = modelo.id;
+                        option.textContent = modelo.nome;
+                        modeloPresetadoSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Erro ao carregar modelos pré-setados:", error));
+
+            // Preencher o editor ao selecionar um modelo
+            modeloPresetadoSelect.addEventListener("change", function () {
+                const modeloId = this.value;
+                if (modeloId) {
+                    fetch(`${API_BASE_URL}/modelos-presetados/${modeloId}/`)
+                        .then(response => response.json())
+                        .then(modelo => {
+                            quill.root.innerHTML = modelo.conteudo || "";
+                        })
+                        .catch(error => console.error("Erro ao carregar conteúdo do modelo:", error));
+                } else {
+                    quill.setText("");
+                }
+            });
+
+            // Buscar pacientes do backend
+            try {
+                const pacientes = await buscarPacientes(""); // Busca todos os pacientes
+                pacientes.forEach(paciente => {
+                    const option = document.createElement("option");
+                    option.value = paciente.id;
+                    option.textContent = paciente.nome;
+                    pacienteSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Erro ao carregar pacientes:", error);
+            }
+        });
+    </script>
+</body>
+</html>
