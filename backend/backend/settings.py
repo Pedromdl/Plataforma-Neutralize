@@ -62,7 +62,7 @@ MIDDLEWARE = [
 
 # Libere o domínio do seu frontend na Vercel
 CORS_ALLOWED_ORIGINS = [
-    "https://https://plataforma-neutralize.vercel.app/",
+    "https://plataforma-neutralize.vercel.app",
     "http://localhost:3000"  # Para desenvolvimento local
 ]
 

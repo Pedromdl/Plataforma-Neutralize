@@ -1,1 +1,1 @@
-web: gunicorn backend.plataforma-pacientes.wsgi:application
+web: gunicorn backend.backend.wsgi:application
