@@ -31,7 +31,7 @@ class SalvarPacienteView(APIView):
             )
 
         # Processar os dados de força muscular
-        forcas_data = request.data.get('forcas', [])
+        forcas_data = request.data.get('dadosdeforcamuscular', [])
         for forca_data in forcas_data:
             ForcaMuscular.objects.create(
                 paciente=paciente,
@@ -43,7 +43,7 @@ class SalvarPacienteView(APIView):
             )
 
         # Processar os dados de escalas e questionários
-        escalas_data = request.data.get('escalas', [])
+        escalas_data = request.data.get('escalasequestionarios', [])
         for escala_data in escalas_data:
             EscalaseQuestionários.objects.create(
                 paciente=paciente,
@@ -92,19 +92,48 @@ class HistoricoClinicoView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        paciente_id = request.data.get('paciente')
-        hoje = date.today()
-        historico = HistoricoClinico.objects.filter(paciente_id=paciente_id, data_avaliacao=hoje).first()
-        serializer = HistoricoClinicoSerializer(
-            historico, data=request.data, partial=True
-        )
-        if serializer.is_valid():
-            serializer.save()
+        try:
+            # Obter os dados do request
+            paciente_id = request.data.get('paciente')  # ID do paciente
+            conteudo = request.data.get('conteudo')  # Conteúdo do Quill
+            modelo_presetado_id = request.data.get('modelo_presetado')  # ID do modelo pré-setado (opcional)
+
+            # Validar se o paciente existe
+            paciente = Paciente.objects.filter(id=paciente_id).first()
+            if not paciente:
+                return Response({"error": "Paciente não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Validar se o modelo pré-setado existe (se fornecido)
+            modelo_presetado = None
+            if modelo_presetado_id:
+                modelo_presetado = ModeloPresetado.objects.filter(id=modelo_presetado_id).first()
+                if not modelo_presetado:
+                    return Response({"error": "Modelo pré-setado não encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+            # Verificar se já existe um histórico para o paciente na data atual
+            historico = HistoricoClinico.objects.filter(
+                paciente=paciente,
+                data_avaliacao=date.today()
+            ).first()
+
             if historico:
-                return Response(serializer.data, status=status.HTTP_200_OK)  # Atualizado
+                # Atualizar o histórico existente
+                historico.conteudo = conteudo
+                historico.modelo_presetado = modelo_presetado
+                historico.save()
+                return Response({"message": "Histórico atualizado com sucesso!", "id": historico.id}, status=status.HTTP_200_OK)
             else:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)  # Criado novo
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                # Criar um novo histórico
+                historico = HistoricoClinico.objects.create(
+                    paciente=paciente,
+                    conteudo=conteudo,
+                    modelo_presetado=modelo_presetado
+                )
+                return Response({"message": "Histórico criado com sucesso!", "id": historico.id}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            print(e)  # Log do erro para depuração
+            return Response({"error": "Erro ao salvar o histórico."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
