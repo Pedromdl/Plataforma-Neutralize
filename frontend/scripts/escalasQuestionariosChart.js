@@ -7,6 +7,8 @@ export class escalasQuestionariosChart {
     }
   
     render(pacienteData, filterDate = null) {
+      console.log("Dados recebidos para renderização no EscalasQuestionariosChart:", pacienteData);
+
       if (!pacienteData || !pacienteData.escalasequestionarios || pacienteData.escalasequestionarios.length === 0) {
         this._hideChart();
         return;

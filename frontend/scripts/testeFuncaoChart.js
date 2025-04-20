@@ -7,6 +7,8 @@ export class TesteFuncaoChart {
   }
 
   render(pacienteData, filterDate = null) {
+      console.log("Dados recebidos para renderização no TesteFuncaoChart:", pacienteData);
+
       if (!pacienteData || !pacienteData.dadosdetestes || pacienteData.dadosdetestes.length === 0) {
           this._hideChart();
           return;
@@ -123,6 +125,62 @@ export class TesteFuncaoChart {
           if (esq + dir === 0) return 0; // Evitar divisão por zero
           return Math.abs(esq - dir) / ((esq + dir) / 2) * 100;
       });
+  }
+
+  _getChartOptions(testesFuncao, ladoEsquerdo, ladoDireito, filterDate) {
+      return {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  title: {
+                      display: true,
+                      text: 'Nível de Força',
+                      color: 'white'
+                  },
+                  ticks: {
+                      color: 'white'
+                  },
+                  suggestedMax: Math.max(...ladoEsquerdo, ...ladoDireito) + 10
+              },
+              'y-assimetria': {
+                  beginAtZero: true,
+                  position: 'right',
+                  title: {
+                      display: true,
+                      text: 'Assimetria (%)',
+                      color: 'white'
+                  },
+                  ticks: {
+                      color: 'white'
+                  },
+                  grid: {
+                      drawOnChartArea: false // Não desenhar linhas de grade para o eixo de assimetria
+                  }
+              },
+              x: {
+                  ticks: {
+                      color: 'white'
+                  }
+              }
+          },
+          plugins: {
+              title: {
+                  display: true,
+                  text: filterDate
+                      ? `Testes de Função - Avaliação em ${new Date(filterDate).toLocaleDateString('pt-BR')}`
+                      : 'Testes de Função',
+                  font: { size: 16 },
+                  color: 'white'
+              },
+              legend: {
+                  labels: {
+                      color: 'white'
+                  }
+              }
+          }
+      };
   }
 
   destroy() {

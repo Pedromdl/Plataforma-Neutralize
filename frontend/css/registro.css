@@ -1,0 +1,53 @@
+.form-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para alinhar os containers horizontalmente */
+#mobilidadesContainer,
+#forcaMuscularContainer,
+#escalasContainer {
+    display: flex; /* Ativa o Flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha se não couberem */
+    gap: 1rem; /* Adiciona espaçamento entre os itens */
+}
+
+.dynamic-item {
+    margin-bottom: 0; /* Remove o espaçamento inferior, já que o Flexbox gerencia o espaçamento */
+    flex: 1 1 calc(33.333% - 1rem); /* Cada item ocupa 1/3 da largura do container, com espaçamento */
+    max-width: 250px; /* Define um limite máximo de largura */
+    min-width: 200px; /* Define um limite mínimo de largura */
+    padding: 1rem; /* Adiciona espaçamento interno */
+    border: 1px solid #dee2e6; /* Adiciona uma borda */
+    border-radius: 0.5rem; /* Deixa a borda arredondada */
+    background-color: #ffffff; /* Fundo branco para contraste */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
+}
+
+.dynamic-item .form-label {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte */
+}
+
+.dynamic-item .form-control {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte dos inputs */
+}
+
+.dynamic-item textarea {
+    resize: none; /* Remove a opção de redimensionar o campo de texto */
+}
+
+.dynamic-item .btn-remove-item {
+    margin-top: 0.5rem;
+    font-size: 0.8rem; /* Reduz o tamanho do botão */
+}
+
+.dynamic-item .d-flex > div {
+    flex: 1; /* Faz com que os campos "Esquerdo" e "Direito" ocupem o mesmo espaço */
+}
+
+.dynamic-item .d-flex > div:not(:last-child) {
+    margin-right: 0.5rem; /* Adiciona espaçamento entre os campos "Esquerdo" e "Direito" */
+}

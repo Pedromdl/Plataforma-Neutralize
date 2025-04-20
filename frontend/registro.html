@@ -6,36 +6,9 @@
     <title>Cadastro de Paciente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Adicionar Quill.js -->
+    <link href="css/registro.css" rel="stylesheet"> <!-- Importar o arquivo CSS -->
     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
-    <style>
-        .form-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            background-color: #f8f9fa;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-        }
-        .dynamic-item {
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border: 1px solid #dee2e6;
-            border-radius: 1rem; /* Bordas arredondadas */
-            background-color: white;
-            width: 250px; /* Largura fixa para o formato retangular pequeno */
-            height: auto; /* Altura ajustável */
-            display: inline-block; /* Exibir os containers lado a lado */
-            vertical-align: top; /* Alinhar os containers verticalmente */
-            text-align: left; /* Alinhar o conteúdo à esquerda */
-        }
-        .dynamic-item input,
-        .dynamic-item textarea {
-            font-size: 0.9rem; /* Ajustar o tamanho da fonte */
-        }
-        .btn-remove-item {
-            margin-top: 0.5rem;
-        }
-    </style>
 </head>
 <body>
     <div class="container py-5">
@@ -108,7 +81,7 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                 <button type="button" id="btnVoltarDashboard" class="btn btn-secondary me-md-2">Voltar ao Dashboard</button>
                 <button type="button" id="btnCancelar" class="btn btn-secondary me-md-2">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Cadastrar Paciente</button>
+                <button type="button" id="btnSalvarAvaliacao" class="btn btn-primary">Salvar Avaliação</button>
             </div>
         </form>
     </div>
@@ -118,6 +91,10 @@
         import { initializeQuill } from './scripts/quillConfig.js';
         import { buscarPacientes } from './scripts/buscaPacientes.js';
         import { API_BASE_URL } from './config.js';
+        import { adicionarMobilidade } from './scripts/registro/adicionarmobilidade.js';
+        import { adicionarForcaMuscular } from './scripts/registro/adicionarmusculatura.js';
+        import { adicionarEscala } from './scripts/registro/adicionarescalas.js';
+
 
         document.addEventListener("DOMContentLoaded", async function () {
             console.log("DOM carregado!");
@@ -128,16 +105,12 @@
 
             // Inicializar o editor Quill.js
             const quill = initializeQuill('#conteudoHistoricoEditor');
-            console.log("Editor Quill inicializado!");
-
             // Buscar modelos pré-setados do backend
             fetch(`${API_BASE_URL}/modelos-presetados/`)
                 .then(response => {
-                    console.log("Resposta do backend:", response);
                     return response.json();
                 })
                 .then(modelos => {
-                    console.log("Modelos carregados:", modelos);
                     modelos.forEach(modelo => {
                         const option = document.createElement("option");
                         option.value = modelo.id;
@@ -160,6 +133,174 @@
                 } else {
                     quill.setText("");
                 }
+            });
+
+            // Adicionar funcionalidade ao botão "Salvar Histórico"
+            document.getElementById("btnSalvarHistorico").addEventListener("click", function () {
+                const conteudoHTML = quill.root.innerHTML; // Obter o conteúdo do editor em HTML
+                const registroId = document.getElementById("paciente").value; // Obter o ID do paciente selecionado
+                const modeloPresetadoId = document.getElementById("modeloPresetado").value; // Obter o ID do modelo pré-setado selecionado
+
+                if (!registroId) {
+                    alert("Selecione um paciente antes de salvar o histórico.");
+                    return;
+                }
+
+                // Obter os dados de mobilidade
+                const mobilidades = [];
+                document.querySelectorAll("#mobilidadesContainer .dynamic-item").forEach(item => {
+                    const nome = item.querySelector(".nome-mobilidade").value;
+                    const ladoEsquerdo = item.querySelector(".lado-esquerdo").value;
+                    const ladoDireito = item.querySelector(".lado-direito").value;
+                    const observacao = item.querySelector(".observacao-mobilidade").value;
+
+                    if (nome) { // Apenas adicionar se o nome estiver preenchido
+                        mobilidades.push({
+                            nome,
+                            lado_esquerdo: ladoEsquerdo,
+                            lado_direito: ladoDireito,
+                            observacao,
+                        });
+                    }
+                });
+
+                // Enviar os dados para o backend
+                fetch(`${API_BASE_URL}/historicos-clinicos/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        paciente: registroId, // ID do paciente
+                        conteudo: conteudoHTML, // Conteúdo do Quill
+                        modelo_presetado: modeloPresetadoId || null, // ID do modelo pré-setado (ou null se não selecionado)
+                        mobilidades, // Dados de mobilidade
+                    }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao salvar o histórico.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert(data.message); // Exibir mensagem do backend
+                    })
+                    .catch(error => {
+                        console.error('Erro ao salvar o histórico:', error);
+                        alert('Erro ao salvar o histórico.');
+                    });
+            });
+
+            // Adicionar funcionalidade ao botão "Adicionar Mobilidade"
+    document.getElementById("btnAdicionarMobilidade").addEventListener("click", function () {
+        adicionarMobilidade(mobilidadesContainer);
+    });
+
+            const forcaMuscularContainer = document.getElementById("forcaMuscularContainer");
+
+            // Adicionar funcionalidade ao botão "Adicionar Musculatura"
+            document.getElementById("btnAdicionarForca").addEventListener("click", function () {
+                adicionarForcaMuscular(forcaMuscularContainer);
+            });
+
+            const escalasContainer = document.getElementById("escalasContainer");
+
+            // Adicionar funcionalidade ao botão "Adicionar Escala"
+            document.getElementById("btnAdicionarEscala").addEventListener("click", function () {
+                adicionarEscala(escalasContainer);
+            });
+
+            // Adicionar funcionalidade ao botão "Salvar Avaliação"
+            document.getElementById("btnSalvarAvaliacao").addEventListener("click", function () {
+                const registroId = document.getElementById("paciente").value; // Obter o ID do paciente selecionado
+
+                if (!registroId) {
+                    alert("Selecione um paciente antes de salvar a avaliação.");
+                    return;
+                }
+
+                // Obter os dados de mobilidade
+                const mobilidades = [];
+                document.querySelectorAll("#mobilidadesContainer .dynamic-item").forEach(item => {
+                    const nome = item.querySelector(".nome-mobilidade").value;
+                    const ladoEsquerdo = item.querySelector(".lado-esquerdo").value;
+                    const ladoDireito = item.querySelector(".lado-direito").value;
+                    const observacao = item.querySelector(".observacao-mobilidade").value;
+
+                    if (nome) { // Apenas adicionar se o nome estiver preenchido
+                        mobilidades.push({
+                            nome,
+                            lado_esquerdo: ladoEsquerdo,
+                            lado_direito: ladoDireito,
+                            observacao,
+                        });
+                    }
+                });
+
+                // Obter os dados de força muscular
+                const dadosdeforcamuscular = [];
+                document.querySelectorAll("#forcaMuscularContainer .dynamic-item").forEach(item => {
+                    const musculatura = item.querySelector(".musculatura").value;
+                    const ladoEsquerdo = item.querySelector(".lado-esquerdo").value;
+                    const ladoDireito = item.querySelector(".lado-direito").value;
+                    const observacao = item.querySelector(".observacao-forca").value;
+
+                    if (musculatura) { // Apenas adicionar se a musculatura estiver preenchida
+                        dadosdeforcamuscular.push({
+                            musculatura,
+                            lado_esquerdo: ladoEsquerdo,
+                            lado_direito: ladoDireito,
+                            observacao,
+                        });
+                    }
+                });
+
+                // Obter os dados de escalas e questionários
+                const escalasequestionarios = [];
+                document.querySelectorAll("#escalasContainer .dynamic-item").forEach(item => {
+                    const nome = item.querySelector(".nome-escala").value;
+                    const resultado = item.querySelector(".resultado-escala").value;
+
+                    if (nome) { // Apenas adicionar se o nome estiver preenchido
+                        escalasequestionarios.push({
+                            nome,
+                            resultado,
+                        });
+                    }
+                });
+
+                // Enviar os dados para o backend (SalvarPacienteView)
+                fetch(`${API_BASE_URL}/salvar-paciente/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        paciente: registroId, // ID do paciente
+                        mobilidades, // Dados de mobilidade
+                        dadosdeforcamuscular, // Dados de força muscular
+                        escalasequestionarios, // Dados de escalas e questionários
+                    }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Erro ao salvar a avaliação.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert(data.message); // Exibir mensagem do backend
+                    })
+                    .catch(error => {
+                        console.error('Erro ao salvar a avaliação:', error);
+                        alert('Erro ao salvar a avaliação.');
+                    });
+            });
+
+            // Adicionar funcionalidade ao botão "Voltar ao Dashboard"
+            document.getElementById("btnVoltarDashboard").addEventListener("click", function () {
+                window.location.href = "dashboardprofissionais.html"; // Redireciona para o dashboard
             });
 
             // Buscar pacientes do backend
