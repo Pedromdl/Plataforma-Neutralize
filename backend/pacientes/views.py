@@ -1,9 +1,11 @@
 from datetime import date
-from rest_framework import status
+from rest_framework import status, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Paciente, Mobilidade, HistoricoClinico, ModeloPresetado, ForcaMuscular, EscalaseQuestionários
-from .serializers import PacienteSerializer, MobilidadeSerializer, HistoricoClinicoSerializer, ModeloPresetadoSerializer
+from rest_framework.viewsets import ModelViewSet
+from .models import Paciente, RegiaoDor, RegistroSessao, Mobilidade, HistoricoClinico, ModeloPresetado, ForcaMuscular, EscalaseQuestionários, Agendamento
+from .serializers import PacienteSerializer, RegiaoDorSerializer,  RegistroSessaoSerializer, MobilidadeSerializer, HistoricoClinicoSerializer, ModeloPresetadoSerializer, AgendamentoSerializer
 from django.shortcuts import render
 
 
@@ -135,6 +137,20 @@ class HistoricoClinicoView(APIView):
             print(e)  # Log do erro para depuração
             return Response({"error": "Erro ao salvar o histórico."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class AgendamentoViewSet(ModelViewSet):
+    queryset = Agendamento.objects.all()
+    serializer_class = AgendamentoSerializer
 
+class RegistroSessaoViewSet(ModelViewSet):
+    queryset = RegistroSessao.objects.all()
+    serializer_class = RegistroSessaoSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = {
+        'paciente': ['exact'],
+        'data': ['gte', 'lte'],
+    }
+    ordering_fields = ['data']
 
-
+class RegiaoDorViewSet(ModelViewSet):
+    queryset = RegiaoDor.objects.all()
+    serializer_class = RegiaoDorSerializer

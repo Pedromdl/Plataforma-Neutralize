@@ -16,7 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from pacientes.views import SalvarPacienteView, BuscarPacientesView, ModeloPresetadoView, HistoricoClinicoView, index
+from rest_framework.routers import DefaultRouter
+from pacientes.views import RegiaoDorViewSet, RegistroSessaoViewSet, AgendamentoViewSet, SalvarPacienteView, BuscarPacientesView, ModeloPresetadoView, HistoricoClinicoView, index
+
+# Criação do roteador
+router = DefaultRouter()
+router.register(r'agendamentos', AgendamentoViewSet, basename='agendamento')
+router.register(r'registros-sessao', RegistroSessaoViewSet)
+router.register(r'regioes-dor', RegiaoDorViewSet, basename='regiaodor')
 
 
 urlpatterns = [
@@ -25,8 +32,8 @@ urlpatterns = [
     path('buscar-pacientes/', BuscarPacientesView.as_view(), name='buscar-pacientes'),
     path('modelos-presetados/', ModeloPresetadoView.as_view(), name='modelos-presetados'),
     path('modelos-presetados/<int:modelo_id>/', ModeloPresetadoView.as_view(), name='obter_modelo_presetado'),
-    path('historicos-clinicos/', HistoricoClinicoView.as_view(), name='criar-historico-clinico'),
-
+    path('historicos-clinicos/<int:paciente_id>/', HistoricoClinicoView.as_view(), name='listar-historicos-clinicos'),
     path('', index, name='index'),
+    path('', include(router.urls)),  # Inclui as rotas geradas pelo roteador
 ]
-    
+

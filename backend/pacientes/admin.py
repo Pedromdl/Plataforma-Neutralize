@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (
     Paciente, Mobilidade, ForcaMuscular, EscalaseQuestionários,
-    TodosTestes, CategoriaTeste, TesteFuncao, ModeloPresetado, HistoricoClinico
+    TodosTestes, CategoriaTeste, TesteFuncao, ModeloPresetado, HistoricoClinico,
+    Agendamento, RegistroSessao, RegiaoDor
 )
 
 @admin.register(Paciente)
@@ -55,3 +56,23 @@ class TesteFuncaoAdmin(admin.ModelAdmin):
     list_display = ('paciente', 'teste', 'data_avaliacao', 'lado_esquerdo', 'lado_direito', 'observacao')
     search_fields = ('paciente__nome', 'teste__nome')
     list_filter = ('paciente__nome', 'teste', 'data_avaliacao')
+
+@admin.register(Agendamento)
+class AgendamentoAdmin(admin.ModelAdmin):
+    list_display = ('paciente', 'data_hora', 'observacoes')
+    search_fields = ('paciente__nome',)
+    list_filter = ('data_hora',)
+    date_hierarchy = 'data_hora'
+
+class RegiaoDorInline(admin.TabularInline):
+    model = RegiaoDor
+    extra = 1
+
+@admin.register(RegistroSessao)
+class RegistroSessaoAdmin(admin.ModelAdmin):
+    inlines = [RegiaoDorInline]
+    list_display = ('paciente', 'data', 'observacoes')
+
+@admin.register(RegiaoDor)
+class RegiaoDorAdmin(admin.ModelAdmin):
+    list_display = ('registro', 'regiao', 'valor')

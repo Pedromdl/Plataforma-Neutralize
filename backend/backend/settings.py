@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'pacientes',
     'corsheaders',
+    'django_filters'
 
 ]
 
@@ -61,11 +62,9 @@ MIDDLEWARE = [
 
 # Libere o domínio do seu frontend na Vercel
 
-CORS_ALLOWED_ORIGINS = [
-    "https://plataforma-neutralize.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:8080",  # Para desenvolvimento local
-]
+##CORS_ALLOWED_ORIGINS = [ "https://plataforma-neutralize.vercel.app",]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Apenas para desenvolvimento!
 
 # Se precisar de cookies/sessão (ex: autenticação)
 
