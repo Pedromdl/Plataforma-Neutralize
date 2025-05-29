@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de Dor - Neutralize</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboardprofissionais.css">
+  <style>
+    .container-painmap {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 960px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      background: #222;
+    }
+    .container-painmap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    rect {
+      pointer-events: auto;
+      cursor: pointer;
+      fill: transparent;
+      stroke: red;
+      stroke-width: 2;
+      transition: fill 0.3s;
+    }
+    rect.selected {
+      fill: rgba(255, 0, 0, 0.5);
+    }
+    /* Ajuste para o pre de resultado */
+    #resultado {
+      background: #232323;
+      color: #fff;
+      border-radius: 0.5rem;
+      padding: 10px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <!-- Menu lateral -->
+  <div id="sidebar-container"></div>
+
+  <div class="content container py-3">
+    <!-- Buscador de Pacientes - POSICIONADO NO TOPO -->
+    <div class="card card-grafico mb-3">
+      <div class="card-body">
+        <form id="buscarPacienteForm" class="position-relative mb-3">
+          <label for="busca" class="form-label">Buscar Paciente</label>
+          <div class="row g-2">
+            <div class="col-md-9 position-relative">
+              <input type="text" id="busca" class="form-control form-control-sm" placeholder="Nome ou CPF" required>
+              <ul id="resultadoBusca" class="dropdown-menu w-100" style="display: none;"></ul>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-primary btn-sm w-100">Selecionar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- FIM DO BUSCADOR -->
+
+    <div class="card card-grafico mb-3">
+      <div class="card-body">
+        <h1 class="h5 mb-4">Registro de Sessão - Neutralize</h1>
+        <div class="container-painmap mb-3">
+          <img src="images/corpohumano.png" alt="Corpo humano" />
+          <svg
+            version="1.1"
+            id="svg1"
+            width="4431"
+            height="7350"
+            viewBox="0 0 4431 7350"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg">
+            <defs id="defs1" />
+            <g id="g1">
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="ombro_direito" width="326.66666" height="311.81818" x="1366.0605" y="1425.4546" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="ombro_esquerdo" width="326.66699" height="311.81818" x="2754.8789" y="1410.5151" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="cotovelo_esquerdo" width="326.66699" height="311.81818" x="3058.394" y="2160.7576" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="cotovelo_direito" width="326.66699" height="311.81818" x="1180.9395" y="2123.7273" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="punho_direito" width="326.66699" height="311.81818" x="623.57581" y="2917.7881" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="punho_esquerdo" width="326.66699" height="311.81818" x="3630.9395" y="2895.8486" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_direito" width="593.9397" height="579.09088" x="1581.8484" y="3044.3333" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_esquerdo" width="593.9397" height="579.09088" x="2234.8181" y="2999.4243" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_direito" width="326.66699" height="311.81818" x="1796.2424" y="4595.5757" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_esquerdo" width="326.66699" height="311.81818" x="2339.1211" y="4573.7271" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="tornozelo_direito" width="326.66699" height="311.81818" x="1878.8182" y="5999.1816" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="tornozelo_esquerdo" width="326.66699" height="311.81818" x="2250.0303" y="5969.4849" />
+            </g>
+          </svg>
+        </div>
+        <div class="mb-3">
+          <label for="observacoesGerais" class="form-label">Observações Gerais</label>
+          <textarea id="observacoesGerais" class="form-control" rows="2"></textarea>
+        </div>
+        <button id="btnSalvarRegistro" class="btn btn-success mt-2">Salvar Registro de Sessão</button>
+        <pre id="resultado"></pre>
+      </div>
+    </div>
+  </div>
+  
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="modalDor" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Intensidade da Dor</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <label for="dorInput" class="form-label">Informe a intensidade da dor (0 a 10):</label>
+            <input id="dorInput" type="number" min="0" max="10" step="1" class="form-control mb-3" />
+            <label for="obsInput" class="form-label">Observações:</label>
+            <textarea id="obsInput" rows="3" class="form-control mb-3" style="resize: vertical;"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button id="btnSalvar" class="btn btn-primary">Salvar</button>
+            <button id="btnCancelar" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const nomesRegioes = {
+      ombro_direito: "Ombro Direito",
+      ombro_esquerdo: "Ombro Esquerdo",
+      cotovelo_esquerdo: "Cotovelo Esquerdo",
+      cotovelo_direito: "Cotovelo Direito",
+      punho_direito: "Punho Direito",
+      punho_esquerdo: "Punho Esquerdo",
+      quadril_direito: "Quadril Direito",
+      quadril_esquerdo: "Quadril Esquerdo",
+      joelho_direito: "Joelho Direito",
+      joelho_esquerdo: "Joelho Esquerdo",
+      tornozelo_direito: "Tornozelo Direito",
+      tornozelo_esquerdo: "Tornozelo Esquerdo"
+    };
+    const selectedRegions = {};
+    const resultadoEl = document.getElementById("resultado");
+    const modalTitle = document.getElementById("modalTitle");
+    const dorInput = document.getElementById("dorInput");
+    const obsInput = document.getElementById("obsInput");
+    const btnSalvar = document.getElementById("btnSalvar");
+    const btnCancelar = document.getElementById("btnCancelar");
+    let currentRegionId = null;
+    let bsModal = new bootstrap.Modal(document.getElementById('modalDor'));
+
+    // Função para abrir modal
+    function abrirModal(regionId) {
+      currentRegionId = regionId;
+      const nomeAmigavel = nomesRegioes[regionId] || regionId.replace(/_/g, ' ');
+      modalTitle.textContent = nomeAmigavel;
+      dorInput.value = selectedRegions[regionId]?.valor ?? '';
+      obsInput.value = selectedRegions[regionId]?.obs ?? '';
+      bsModal.show();
+      setTimeout(() => dorInput.focus(), 300);
+    }
+
+    // Função para fechar modal
+    function fecharModal() {
+      bsModal.hide();
+      currentRegionId = null;
+      dorInput.value = '';
+      obsInput.value = '';
+    }
+
+    // Atualiza resultado na tela
+    function atualizarResultado() {
+      resultadoEl.textContent = JSON.stringify(selectedRegions, null, 2);
+    }
+
+    // Evento de clique em cada região (rect)
+    document.querySelectorAll("svg rect").forEach(rect => {
+      rect.addEventListener("click", () => {
+        abrirModal(rect.id);
+      });
+    });
+
+    // Salvar botão no modal
+    btnSalvar.addEventListener("click", () => {
+      const val = parseInt(dorInput.value, 10);
+      const obs = obsInput.value.trim();
+      if (isNaN(val) || val < 0 || val > 10) {
+        alert("Por favor, insira um valor entre 0 e 10.");
+        dorInput.focus();
+        return;
+      }
+      selectedRegions[currentRegionId] = { valor: val, obs: obs };
+      // Marca visualmente
+      document.getElementById(currentRegionId).classList.add("selected");
+      atualizarResultado();
+      fecharModal();
+    });
+
+    // Cancelar botão no modal
+    btnCancelar.addEventListener("click", fecharModal);
+
+    // Atualiza resultado inicial (vazio)
+    atualizarResultado();
+  </script>
+  <script>
+    const API_BASE_URL = "http://127.0.0.1:8000"; // ajuste se necessário
+
+    const inputBusca = document.getElementById("busca");
+    const resultadoBusca = document.getElementById("resultadoBusca");
+    const formBusca = document.getElementById("buscarPacienteForm");
+
+    // Variável global para paciente selecionado
+    let pacienteSelecionado = null;
+
+    // Modifique o evento do buscador para salvar o paciente selecionado
+    inputBusca.addEventListener("input", async () => {
+      const query = inputBusca.value.trim();
+      resultadoBusca.innerHTML = "";
+      if (query.length > 1) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/buscar-pacientes/?search=${encodeURIComponent(query)}`);
+          if (!response.ok) throw new Error("Erro ao buscar pacientes");
+          const pacientes = await response.json();
+          if (pacientes.length > 0) {
+            resultadoBusca.style.display = "block";
+            pacientes.forEach(paciente => {
+              const li = document.createElement("li");
+              li.textContent = `${paciente.nome} (${paciente.cpf || "CPF não informado"})`;
+              li.classList.add("dropdown-item");
+              li.addEventListener("click", () => {
+                inputBusca.value = paciente.nome;
+                resultadoBusca.style.display = "none";
+                pacienteSelecionado = paciente; // <-- Salva o paciente selecionado
+              });
+              resultadoBusca.appendChild(li);
+            });
+          } else {
+            resultadoBusca.style.display = "none";
+          }
+        } catch (error) {
+          resultadoBusca.style.display = "none";
+        }
+      } else {
+        resultadoBusca.style.display = "none";
+      }
+    });
+
+    // Esconde o dropdown se clicar fora
+    document.addEventListener("click", (e) => {
+      if (!resultadoBusca.contains(e.target) && e.target !== inputBusca) {
+        resultadoBusca.style.display = "none";
+      }
+    });
+
+    // Opcional: ação ao submeter o formulário
+    formBusca.addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Você pode buscar e exibir dados do paciente selecionado aqui
+    });
+
+    // Função para salvar o registro de sessão
+    async function salvarRegistroSessao() {
+      if (!pacienteSelecionado) {
+        alert("Selecione um paciente antes de salvar!");
+        return;
+      }
+      if (Object.keys(selectedRegions).length === 0) {
+        alert("Selecione pelo menos uma região de dor!");
+        return;
+      }
+      // Monta o objeto regioes_de_dor apenas com os valores
+      const regioes = Object.entries(selectedRegions).map(([regiao, info]) => ({
+        regiao: regiao,
+        valor: info.valor
+      }));
+
+      const observacoes = document.getElementById("observacoesGerais").value.trim();
+
+      const data = {
+          paciente: pacienteSelecionado.id,
+          observacoes,
+          regioes
+        };
+
+      try {
+        const resp = await fetch(`${API_BASE_URL}/registros-sessao/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (!resp.ok) throw new Error("Erro ao salvar registro");
+        alert("Registro salvo com sucesso!");
+      } catch (err) {
+        alert("Erro ao salvar: " + err.message);
+      }
+    }
+
+    // Conecte o botão ao JS:
+    document.getElementById("btnSalvarRegistro").addEventListener("click", salvarRegistroSessao);
+  </script>
+
+  <script src="scripts/sidebar.js"></script>
+
+</body>
+</html>

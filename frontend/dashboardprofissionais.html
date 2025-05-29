@@ -9,13 +9,11 @@
     <link rel="stylesheet" href="css/dashboardprofissionais.css">
 </head>
 <body class="bg-light">
-    
+    <!-- Botão para alternar o menu lateral -->
+    <button id="toggleSidebar" class="btn btn-primary btn-sm m-2">☰ Menu</button>
+
     <!-- Menu lateral -->
-    <div class="sidebar">
-        <a href="dashboardprofissionais.html">📊 Dashboard</a>
-        <a href="#">📈 Evolução</a>
-        <a href="registro.html">📝 Registro</a>
-    </div>
+    <div id="sidebar-container"></div>
 
     <div class="content container py-3">
         <!-- Container para o filtro e o buscador -->
@@ -108,13 +106,27 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Container para Semanas Após Avaliação -->
+            <div id="dadosSemanasAvaliacao" class="card card-grafico" style="display:none;">
+                <div class="card-body p-2">
+                    <h5 class="h6 mb-4">Semanas</h5>
+                    <ul id="listaSemanasAvaliacao" class="list-group list-group-flush">
+                        <!-- Os itens serão adicionados dinamicamente -->
+                    </ul>
+                    <p id="semDadosSemanas" class="alert alert-info py-1 px-2 my-1 small" style="display:none">
+                        Nenhuma avaliação encontrada
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Scripts no final do body -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="/scripts/sidebar.js"></script>
+
     <!-- Carregar o script.js -->
     <script type="module" src="script.js"></script>
 </body>

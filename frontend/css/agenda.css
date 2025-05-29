@@ -1,0 +1,227 @@
+/* Estilo geral para o corpo */
+body {
+    display: flex;
+    background-color: #121212;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo para o menu lateral */
+.sidebar {
+    width: 200px;
+    transition: transform 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #495057;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+
+.sidebar a {
+    color: white;
+    padding: 15px;
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar a:hover {
+    background-color: #343a40;
+}
+
+.sidebar a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Estilo para o botão de alternar o menu */
+#toggleSidebar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1100;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#toggleSidebar:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para o conteúdo principal */
+.content {
+    margin-left: 200px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    width: 100%;
+}
+
+.content.expanded {
+    margin-left: 0;
+}
+
+/* Estilo para o calendário */
+#calendar {
+    background-color: #242424;
+    color: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para o cabeçalho do calendário */
+.fc-toolbar {
+    background-color: #495057;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+/* Estilo para os dias do calendário */
+.fc-daygrid-day {
+    background-color: #121212;
+    color: white;
+    border: 1px solid #495057;
+}
+
+.fc-daygrid-day:hover {
+    background-color: #343a40;
+}
+
+/* Estilo para os eventos no calendário */
+.fc-event {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100px;
+    }
+    .sidebar a {
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+    }
+    .content {
+        margin-left: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 60px;
+    }
+    .sidebar a {
+        font-size: 12px;
+        padding: 8px;
+        text-align: center;
+    }
+    .content {
+        margin-left: 60px;
+    }
+}
+
+/* Estilo para o modal */
+.modal {
+    position: fixed;
+    z-index: 1050; /* Certifique-se de que o modal está acima de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro com transparência */
+    display: none;
+    align-items: center;
+    justify-content: center; /* Centraliza o modal horizontal e verticalmente */
+}
+
+/* Conteúdo do modal */
+.modal-content {
+    background-color: #242424; /* Fundo escuro */
+    color: white; /* Texto branco */
+    border-radius: 0.5rem; /* Bordas arredondadas */
+    padding: 1.5rem; /* Espaçamento interno */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Sombra */
+    width: 30%; /* Largura do modal */
+    max-width: 350px; /* Largura máxima */
+    min-width: 250px; /* Largura mínima */
+    border: 1px solid #495057; /* Borda com cor do tema */
+}
+
+/* Botão de fechar */
+.modal-content .close {
+    color: #aaa; /* Cor neutra */
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+    color: white; /* Cor branca ao passar o mouse */
+    text-decoration: none;
+}
+
+/* Estilo dos campos do formulário */
+.modal-content form label {
+    font-size: 0.9rem; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #f8f9fa; /* Cor clara */
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.modal-content form input,
+.modal-content form select,
+.modal-content form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #495057; /* Borda com cor do tema */
+    border-radius: 0.5rem; /* Bordas arredondadas */
+    background-color: #121212; /* Fundo escuro */
+    color: white; /* Texto branco */
+    font-size: 0.9rem;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+/* Botões do modal */
+.modal-content form button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content form #saveEvent {
+    background-color: #007bff; /* Azul */
+    color: white; /* Texto branco */
+}
+
+.modal-content form #saveEvent:hover {
+    background-color: #0056b3; /* Azul mais escuro */
+}
+
+.modal-content form #deleteEvent {
+    background-color: #dc3545; /* Vermelho */
+    color: white; /* Texto branco */
+    margin-left: 1rem;
+}
+
+.modal-content form #deleteEvent:hover {
+    background-color: #a71d2a; /* Vermelho mais escuro */
+}
