@@ -1,6 +1,3 @@
-
-import { API_BASE_URL } from '../config.js';
-
 export function initSearch(chartsManager) {
   const inputBusca = document.getElementById("busca");
   const resultadoBusca = document.getElementById("resultadoBusca");
