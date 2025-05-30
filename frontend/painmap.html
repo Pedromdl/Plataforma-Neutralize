@@ -2,58 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapa de Dor - Neutralize</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/dashboardprofissionais.css">
-  <style>
-    .container-painmap {
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      height: 960px;
-      margin: 0 auto;
-      border: 1px solid #ccc;
-      background: #222;
-    }
-    .container-painmap img {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    rect {
-      pointer-events: auto;
-      cursor: pointer;
-      fill: transparent;
-      stroke: red;
-      stroke-width: 2;
-      transition: fill 0.3s;
-    }
-    rect.selected {
-      fill: rgba(255, 0, 0, 0.5);
-    }
-    /* Ajuste para o pre de resultado */
-    #resultado {
-      background: #232323;
-      color: #fff;
-      border-radius: 0.5rem;
-      padding: 10px;
-      margin-top: 20px;
-      white-space: pre-wrap;
-    }
-  </style>
+  <link rel="stylesheet" href="css/painmap.css">
 </head>
 <body class="bg-light">
-  <!-- Menu lateral -->
-  <div id="sidebar-container"></div>
+
+    <div id="sidebar-container"></div>
 
   <div class="content container py-3">
     <!-- Buscador de Pacientes - POSICIONADO NO TOPO -->
@@ -96,10 +54,10 @@
               <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="cotovelo_direito" width="326.66699" height="311.81818" x="1180.9395" y="2123.7273" />
               <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="punho_direito" width="326.66699" height="311.81818" x="623.57581" y="2917.7881" />
               <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="punho_esquerdo" width="326.66699" height="311.81818" x="3630.9395" y="2895.8486" />
-              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_direito" width="593.9397" height="579.09088" x="1581.8484" y="3044.3333" />
-              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_esquerdo" width="593.9397" height="579.09088" x="2234.8181" y="2999.4243" />
-              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_direito" width="326.66699" height="311.81818" x="1796.2424" y="4595.5757" />
-              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_esquerdo" width="326.66699" height="311.81818" x="2339.1211" y="4573.7271" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_direito" width="593.9397" height="579.09088" x="1581.8484" y="2800.3333" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4;stroke-width:1.83756" id="quadril_esquerdo" width="593.9397" height="579.09088" x="2234.8181" y="2800.4243" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_direito" width="350" height="400" x="1750.2424" y="4553.5757" />
+              <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="joelho_esquerdo" width="350" height="400" x="2339.1211" y="4553.7271" />
               <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="tornozelo_direito" width="326.66699" height="311.81818" x="1878.8182" y="5999.1816" />
               <rect style="opacity:0.167;fill:#000000;fill-opacity:0.4" id="tornozelo_esquerdo" width="326.66699" height="311.81818" x="2250.0303" y="5969.4849" />
             </g>
@@ -138,9 +96,11 @@
     </div>
 
   <!-- Bootstrap JS -->
-  <script src="scripts/sidebar.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module" src="scripts/painmap.js"></script>
+  <script src="scripts/sidebar.js"></script>
+
+
   
 </body>
 </html>

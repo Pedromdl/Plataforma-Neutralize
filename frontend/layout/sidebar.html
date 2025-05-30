@@ -30,16 +30,11 @@
     /* Responsividade para sidebar */
     @media (max-width: 768px) {
         .sidebar {
-            width: 100px;
+            display: none !important;
         }
-        .sidebar a {
-            font-size: 14px;
-            padding: 10px;
-            text-align: center;
-        }
-        .content {
-            margin-left: 100px;
-            width: calc(100% - 100px);
+        #mobileMenuBtn {
+            display: block !important;
+            margin-left: 3px;
         }
     }
 
@@ -53,8 +48,15 @@
             text-align: center;
         }
         .content {
-            margin-left: 60px;
-            width: calc(100% - 60px);
+            margin-top: 50px;
+            margin-left: 0px;
+            width: 100%;
+        }
+    }
+
+    @media (min-width: 769px) {
+        #mobileMenuBtn, #mobileMenuModal {
+            display: none !important;
         }
     }
 
@@ -64,12 +66,96 @@
         left: 10px;
         z-index: 1100;
     }
+
+    /* Estilos para o botão e modal do menu mobile */
+    #mobileMenuBtn {
+        display: none;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1101;
+    }
+
+    #mobileMenuModal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    #mobileMenuModal .modal-content,
+    #mobileMenuModal > div {
+        background: #282829 !important;
+        color: #fff !important;
+        width: 80vw;
+        max-width: 320px;
+        margin: 60px auto;
+        border-radius: 12px;
+        padding: 32px 20px 24px 20px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        text-align: left;
+    }
+
+    #mobileMenuModal a {
+        color: #fff !important;
+        font-size: 1.2rem;
+        margin: 16px 0;
+        display: block;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+        border-radius: 6px;
+        padding: 10px 0;
+    }
+
+    #mobileMenuModal a:hover {
+        color: #B7DE42 !important;
+    }
+
+    #closeMobileMenu {
+        float: right;
+        margin-bottom: 16px;
+    }
+
+    @media (max-width: 480px) {
+        #mobileMenuModal .modal-content,
+        #mobileMenuModal > div {
+            width: 96vw;
+            max-width: 96vw;
+            margin: 30px auto;
+            padding: 20px 8px 16px 8px;
+        }
+        #mobileMenuModal a {
+            font-size: 1rem;
+            padding: 8px 0;
+        }
+    }
 </style>
-<div id="sidebar" class="sidebar">
+<div class="sidebar">
     <a></a>
     <a></a>
+    <a href="registro.html">📝 Registro</a>
     <a href="dashboardprofissionais.html">📊 Dashboard</a>
     <a href="evolucao.html">📈 Evolução</a>
-    <a href="registro.html">📝 Registro</a>
     <a href="painmap.html">🗺️ Registro de Sessão</a>
+</div>
+
+<!-- Botão de menu para mobile -->
+<button id="mobileMenuBtn" class="btn btn-primary" style="display:none; position:fixed; top:10px; left:10px; z-index:1101;">
+    ☰ Menu
+</button>
+
+<!-- Modal do menu mobile -->
+<div id="mobileMenuModal" class="modal" tabindex="-1" style="display:none; position:fixed; z-index:2000; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7);">
+    <div style="color:white; width:80vw; max-width:300px; margin:40px auto; border-radius:8px; padding:20px;">
+        <button id="closeMobileMenu" class="btn btn-secondary" style="float:right;">X</button>
+        <a href="registro.html" class="d-block mb-2">Registro</a>
+        <a href="dashboardprofissionais.html" class="d-block mb-2">Dashboard</a>
+        <a href="evolucao.html" class="d-block mb-2">Evolução</a>
+        <a href="painmap.html" class="d-block mb-2">Registro de Sessão</a>
+    </div>
 </div>

@@ -97,7 +97,7 @@ body {
 
 @media (max-width: 768px) {
     .sidebar {
-        width: 100px; /* Reduzindo o tamanho do menu */
+        display: none !important;
     }
     .sidebar a {
         font-size: 14px;
@@ -105,8 +105,8 @@ body {
         text-align: center; /* Centralizando os ícones/textos */
     }
     .content {
-        margin-left: 100px; /* Ajustando o espaço do conteúdo */
-        width: calc(100% - 100px);
+        margin-left: 0px; /* Ajustando o espaço do conteúdo */
+        width: 100%;
     }
 }
 
@@ -120,8 +120,8 @@ body {
         text-align: center;
     }
     .content {
-        margin-left: 60px;
-        width: calc(100% - 60px);
+        margin-left: 0px;
+        width: 100%;
     }
 }
 
